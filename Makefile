@@ -5,7 +5,7 @@ OUTPUT_DIR ?= out
 DST ?=
 
 # Private variables
-obj = drafter-cri-vsock-tcp-proxy
+obj = drafter-cri-unix-vsock-proxy
 all: $(addprefix build/,$(obj))
 
 # Build
