@@ -1,0 +1,6 @@
+metadata:
+  name: httpd-container
+image:
+  image: httpd
+command:
+  - /usr/local/bin/httpd-foreground

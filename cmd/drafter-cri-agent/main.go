@@ -3,18 +3,24 @@ package main
 import (
 	"errors"
 	"flag"
+	"fmt"
 	"io"
 	"log"
 	"net"
 	"net/url"
 	"os"
+	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/loopholelabs/drafter/pkg/utils"
+	ivsock "github.com/loopholelabs/drafter/pkg/vsock"
+	"github.com/mdlayher/vsock"
 )
 
 const (
-	SchemeUnix = "unix"
+	SchemeUnix  = "unix"
+	SchemeVSock = "vsock"
 )
 
 var (
@@ -22,8 +28,8 @@ var (
 )
 
 func main() {
-	rawUpstreamURL := flag.String("upstream-url", "unix:///tmp/upstream.sock", "Upstream URL to listen on")
-	rawDownstreamURL := flag.String("downstream-url", "unix:///tmp/downstream.sock", "Downstream URL to dial")
+	rawUpstreamURL := flag.String("upstream-url", "unix:///tmp/upstream.sock", "Upstream URL to listen on (formatted as unix://<path> or vsock://<cid>:<port>)")
+	rawDownstreamURL := flag.String("downstream-url", "unix:///tmp/downstream.sock", "Downstream URL to dial (formatted as unix://<path> or vsock://localhost:<port>/<path>:)")
 
 	flag.Parse()
 
@@ -43,6 +49,22 @@ func main() {
 		_ = os.Remove(upstreamURL.Path)
 
 		upstreamLis, err = net.Listen("unix", upstreamURL.Path)
+		if err != nil {
+			panic(err)
+		}
+
+	case SchemeVSock:
+		cid, err := strconv.Atoi(upstreamURL.Hostname())
+		if err != nil {
+			panic(err)
+		}
+
+		port, err := strconv.Atoi(upstreamURL.Port())
+		if err != nil {
+			panic(err)
+		}
+
+		upstreamLis, err = vsock.ListenContextID(uint32(cid), uint32(port), nil)
 		if err != nil {
 			panic(err)
 		}
@@ -87,6 +109,30 @@ func main() {
 					downstreamConn, err = net.Dial("unix", downstreamURL.Path)
 					if err != nil {
 						panic(err)
+					}
+
+				case SchemeVSock:
+					downstreamConn, err = net.Dial("unix", downstreamURL.Path)
+					if err != nil {
+						panic(err)
+					}
+
+					port, err := strconv.Atoi(downstreamURL.Port())
+					if err != nil {
+						panic(err)
+					}
+
+					if _, err = downstreamConn.Write([]byte(fmt.Sprintf("CONNECT %d\n", port))); err != nil {
+						panic(err)
+					}
+
+					line, err := utils.ReadLineNoBuffer(downstreamConn)
+					if err != nil {
+						panic(err)
+					}
+
+					if !strings.HasPrefix(line, "OK ") {
+						panic(ivsock.ErrCouldNotConnectToVSock)
 					}
 
 				default:
