@@ -5,7 +5,7 @@ OUTPUT_DIR ?= out
 DST ?=
 
 # Private variables
-obj = drafter-cri-agent
+obj = drafter-cri-proxy-stream drafter-cri-proxy-grpc
 all: $(addprefix build/,$(obj))
 
 # Build
