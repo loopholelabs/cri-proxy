@@ -12,6 +12,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/loopholelabs/drafter-cri/pkg/services"
 	"github.com/loopholelabs/drafter/pkg/utils"
 	ivsock "github.com/loopholelabs/drafter/pkg/vsock"
 	"github.com/mdlayher/vsock"
@@ -126,11 +127,9 @@ func main() {
 	downstreamImageServiceClient := v1.NewImageServiceClient(downstreamConn)
 	downstreamRuntimeServiceClient := v1.NewRuntimeServiceClient(downstreamConn)
 
-	log.Println(downstreamImageServiceClient, downstreamRuntimeServiceClient)
-
 	server := grpc.NewServer()
-	v1.RegisterImageServiceServer(server, &v1.UnimplementedImageServiceServer{})
-	v1.RegisterRuntimeServiceServer(server, &v1.UnimplementedRuntimeServiceServer{})
+	v1.RegisterImageServiceServer(server, services.NewImageGrpc(downstreamImageServiceClient))
+	v1.RegisterRuntimeServiceServer(server, services.NewRuntimeGrpc(downstreamRuntimeServiceClient))
 
 	log.Println("Proxying requests from", upstreamURL, "to", downstreamURL)
 
