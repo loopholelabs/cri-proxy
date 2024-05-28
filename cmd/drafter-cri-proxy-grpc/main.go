@@ -13,8 +13,7 @@ import (
 	"strings"
 
 	"github.com/loopholelabs/drafter-cri/pkg/services"
-	"github.com/loopholelabs/drafter/pkg/utils"
-	ivsock "github.com/loopholelabs/drafter/pkg/vsock"
+	"github.com/loopholelabs/drafter-cri/pkg/utils"
 	"github.com/mdlayher/vsock"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -110,7 +109,7 @@ func main() {
 				}
 
 				if !strings.HasPrefix(line, "OK ") {
-					return nil, ivsock.ErrCouldNotConnectToVSock
+					return nil, errors.New("could not connect to VSock")
 				}
 
 			default:

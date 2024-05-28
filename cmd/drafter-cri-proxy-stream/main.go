@@ -13,8 +13,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/loopholelabs/drafter/pkg/utils"
-	ivsock "github.com/loopholelabs/drafter/pkg/vsock"
+	"github.com/loopholelabs/drafter-cri/pkg/utils"
 	"github.com/mdlayher/vsock"
 )
 
@@ -94,7 +93,7 @@ func main() {
 				defer func() {
 					_ = upstreamConn.Close()
 
-					if err := recover(); err != nil && !utils.IsClosedErr(err.(error)) {
+					if err := recover(); err != nil {
 						log.Printf("Client disconnected with error: %v", err)
 					}
 
@@ -132,7 +131,7 @@ func main() {
 					}
 
 					if !strings.HasPrefix(line, "OK ") {
-						panic(ivsock.ErrCouldNotConnectToVSock)
+						panic(errors.New("could not connect to VSock"))
 					}
 
 				default:
