@@ -8,7 +8,7 @@ Enables Kubernetes to manage pods and their containers as Drafter VMs
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at [https://github.com/loopholelabs/drafter-cri][gitrepo]. For more contribution information check out [the contribution guide](https://github.com/loopholelabs/drafter-cri/blob/master/CONTRIBUTING.md).
+Bug reports and pull requests are welcome on GitHub at [https://github.com/loopholelabs/drafter-cri](https://github.com/loopholelabs/drafter-cri). For more contribution information check out [the contribution guide](./CONTRIBUTING.md).
 
 ## License
 
@@ -20,8 +20,4 @@ Everyone interacting in the Drafter Container Runtime project's codebases, issue
 
 ## Project Managed By:
 
-[![https://loopholelabs.io][loopholelabs]](https://loopholelabs.io)
-
-[gitrepo]: https://github.com/loopholelabs/drafter-cri
-[loopholelabs]: https://cdn.loopholelabs.io/loopholelabs/LoopholeLabsLogo.svg
-[loophomepage]: https://loopholelabs.io
+[![https://loopholelabs.io](https://cdn.loopholelabs.io/loopholelabs/LoopholeLabsLogo.svg)](https://loopholelabs.io)
