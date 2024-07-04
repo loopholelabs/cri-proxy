@@ -16,7 +16,7 @@ The Drafter Container Runtime project is available as open source under the term
 
 ## Code of Conduct
 
-Everyone interacting in the Drafter Container Runtime project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [CNCF Code of Conduct](https://github.com/cncf/foundation/blob/master/code-of-conduct.md).
+Everyone interacting in the Drafter Container Runtime project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [CNCF Code of Conduct](https://github.com/cncf/foundation/blob/main/code-of-conduct.md).
 
 ## Project Managed By:
 
